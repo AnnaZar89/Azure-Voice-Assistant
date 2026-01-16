@@ -1,0 +1,15 @@
+# Klucze i sekrety
+.env
+
+# Pliki i foldery testowe
+static/styleTest.css
+templates/test.html
+test.py
+
+
+# Notatki i brudnopisy
+brudnopis
+opis
+
+# Inne
+.idea/

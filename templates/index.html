@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Voice Assistant</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <h1 class="pageTitle"><a href="#0">Azure Voice Assistant</a></h1>
+    <div class="backgroundContainer">
+    <div class="formContainer">
+        <form id="voiceForm" action="/choosingVoice" method="POST">
+            <label for="voiceChoice">Choose the voice: </label>
+            <select id="voiceChoice" name="voiceChoice">
+                <option value="plf">polski: Zofia</option>
+                <option value="plm">polski: Marek</option>
+                <option value="enf">english(US): Jenny</option>
+                <option value="enm">english(US): Andrew</option>
+                <option value="engf">english(GB): Abbi</option>
+                <option value="engm">english(GB): Ryan</option>
+                <option value="frf">français(FR): Denise</option>
+                <option value="frm">français(FR): Henri</option>
+                <option value="frcf">français(CA): Sylvie</option>
+                <option value="frcm">français(CA): Antoine</option>
+            </select>
+            <input id="submitVoiceChoice" type="submit" value="Save">
+        </form><br>
+        <form id="buttonContainer" style="display: none">
+            <input type="hidden" name="history" id="historyInput" value='{{ history_json|safe }}'>
+            <button type="button" id="recordBtn">Record</button>
+            <button type="button" id="sendBtn" disabled>Send to Azure</button>
+            <button type="button" id="clearBtn">Clear history</button>
+        </form>
+        <div id="voiceInformation"></div>
+        <div id="messengerWrap">
+            <div id="status"></div>
+            <div id="history"></div>
+            <div id="result"></div>
+        </div>
+    </div>
+
+
+
+    <script>
+        window.onload = () => {
+            document.getElementById('historyInput').value = '[]';
+        };
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob = null;
+        let audioHistory = [];
+        let audioIndex;
+        let current_voice_key = ''
+        let currentLang = ''
+
+        const recordBtn = document.getElementById('recordBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const status = document.getElementById('status');
+        const clearBtn = document.getElementById('clearBtn');
+        const voiceForm = document.getElementById('voiceForm');
+        const buttonContainer = document.getElementById('buttonContainer');
+        const voiceInformation = document.getElementById('voiceInformation');
+
+        const translations = {
+            pl: {
+                recording: "Nagrywanie...",
+                ready: "Nagranie gotowe",
+                sending: "Wysyłanie do Azure...",
+                done: "Gotowe!",
+                user: "Ty:",
+                chatTitle: "Rozmowa:"
+            },
+            en: {
+                recording: "Recording...",
+                ready: "Recording ready",
+                sending: "Sending to Azure...",
+                done: "Done!",
+                user: "You:",
+                chatTitle: "Conversation:"
+            },
+            fr: {
+                recording: "Enregistrement...",
+                ready: "Enregistrement terminé",
+                sending: "Envoi à Azure...",
+                done: "Terminé !",
+                user: "Toi :", // we francuskim przed dwukropkiem daje się spację
+                chatTitle: "Conversation :"
+            }
+        };
+
+
+
+       voiceForm.addEventListener('submit', async (e)=> {
+            e.preventDefault()
+            buttonContainer.style.display="flex";
+            voiceForm.style.display="none";
+            const formVoice = new FormData(e.target);
+            try {
+                const response = await fetch('/choosingVoice', {
+                    method: 'POST',
+                    body: formVoice
+                });
+            if (response.ok) {
+                const voiceData = await response.json();
+                console.log(voiceData)
+                current_voice_key = voiceData.current_voice_key
+                currentLang = current_voice_key.slice(0, 2);
+                voiceInformation.innerHTML = `
+                    <h3>SELECTED VOICE: ${voiceData.current_voice_name}</h3>
+                    `;
+                } else {
+                    voiceInformation.innerHTML = 'Błąd generowania mowy';
+                }
+            } catch (error) {
+              voiceInformation.innerHTML = 'Błąd: ' + error.message;
+            }
+        });
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = (e) => {
+                    audioChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    audioChunks = [];
+                    sendBtn.disabled = false;
+                    status.textContent = translations[currentLang]["ready"]
+                };
+            })
+            .catch(err => {
+                status.textContent = 'Błąd dostępu do mikrofonu: ' + err;
+            });
+
+        recordBtn.addEventListener('click', () => {
+            if (mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                recordBtn.textContent = 'Record';
+
+
+            } else {
+                audioChunks = [];
+                audioBlob = null;
+                sendBtn.disabled = true;
+                mediaRecorder.start();
+                recordBtn.textContent = 'Stop';
+                status.textContent = translations[currentLang]["recording"];
+                result.textContent = '';
+            }
+        });
+        sendBtn.addEventListener('click', async () => {
+            if (!audioBlob) return;
+            status.textContent = translations[currentLang]["sending"];
+            sendBtn.disabled = true;
+            const formData = new FormData(document.getElementById('buttonContainer'));
+            formData.append('audio', audioBlob, 'audio.webm');
+            try {
+                const response = await fetch('/recognize', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                console.log('=== ODPOWIEDŹ Z SERWERA ===');
+                console.log('data:', data);
+                console.log('data.history_json:', data.history_json);
+                console.log('Typ:', typeof data.history_json);
+
+                if (data.success) {
+                    const audioFormData = new FormData();
+                    audioFormData.append('text', data.chat_response);
+                    const audioResponse = await fetch('/synthesize', {
+                        method: 'POST',
+                        body: audioFormData
+                    });
+                    if (audioResponse.ok) {
+                        const audioBlob = await audioResponse.blob();
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioHistory.push(audioUrl)
+                        document.getElementById('historyInput').value = data.history_json;
+                        document.getElementById('history').style.display = 'flex';
+                        const historyArray = JSON.parse(data.history_json);
+                        let html = `<h3>${translations[currentLang]["chatTitle"]}</h3>`;
+                        audioIndex = 0;
+                        historyArray.forEach(msg => {
+                            const who = msg.role === 'user' ? translations[currentLang]["user"] : 'ChatGPT:';
+                            html += `<div><p><strong>${who}</strong> ${msg.content}</p>`;
+                            if (msg.role == 'assistant' && audioHistory[audioIndex]) {
+                                const shouldAutoPlay = audioIndex === audioHistory.length - 1;
+                                html += `<audio controls ${shouldAutoPlay ? 'autoPlay' : ''}><source src="${audioHistory[audioIndex]}" type="audio/wav"></audio>`;
+                                audioIndex++;
+                            }
+                            html += `</div>`;
+                        });
+                        document.getElementById('history').innerHTML = html;
+                        status.textContent = translations[currentLang]["done"];
+                    } else {
+                        status.textContent = 'Błąd generowania audio';
+                    }
+                } else {
+                    status.innerHTML = `<span style="color:red">Błąd: ${data.error}</span>`;
+                }
+            } catch (error) {
+                console.error(error);
+                status.textContent = 'Błąd komunikacji: ' + error.message;
+            } finally {
+                sendBtn.disabled = false;
+            }
+        });
+
+        clearBtn.addEventListener('click', async () => {
+            document.getElementById('historyInput').value = '[]';
+            document.getElementById('history').innerHTML = '';
+            audioHistory = [];
+            audioIndex = 0;
+            voiceForm.style.display="flex";
+            buttonContainer.style.display="none";
+            status.textContent = '';
+            voiceChoice.value = 'plf';
+            document.getElementById('history').style.display = 'none';
+            voiceInformation.textContent = '';
+        });
+    </script>
+    </div>
+</body>
+</html>
+
+

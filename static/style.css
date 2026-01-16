@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    background-image: url("city.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+div {
+    width: 100%;
+    max-width: 600px;
+}
+
+.pageTitle {
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    padding: 1px;
+    font-weight: 100;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.pageTitle a {
+    background: black;
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    letter-spacing: 30px;
+    color: white;
+}
+
+.backgroundContainer {
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    margin-top: 100px;
+}
+
+.formContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 55px;
+}
+
+#voiceForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#voiceForm label {
+    font-family: "Roboto";
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 30px;
+}
+
+#voiceForm select {
+    border: none;
+    appearance: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: "Montserrat";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+#submitVoiceChoice {
+    background: #262626;
+    color: white;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-family: "Montserrat";
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+#submitVoiceChoice:hover {
+    background: rgba(45, 45, 45, 0.9);
+}
+
+#buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#buttonContainer button {
+    background: #262626;
+    color: white;
+    font-size: 11px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-family: "Roboto";
+    cursor: pointer;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 3px;
+    width: 155px;
+    transition: 0.5s;
+}
+
+#buttonContainer button:hover {
+    background: #4A4A4A;
+}
+
+#voiceInformation {
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+#messengerWrap {
+    display: flex;
+    flex-direction: column;
+}
+
+#status {
+    padding: 15px 0;
+    font-style: italic;
+    font-size: 14px;
+    color: white;
+}
+
+#history {
+    display: none;
+    border: none;
+    outline: none;
+    appearance: none;
+    box-shadow: 0 0 50px rgba(0, 0, 0);
+    font-size: 14px;
+    padding: 20px;
+    border-radius: 10px;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.3);
+    gap: 5px;
+}
+
+#history audio {
+    margin: 10px 0;
+}
+
+@media screen and (max-width: 1100px) {
+    .backgroundContainer {
+        margin-top: 150px;
+        width: 95%;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+    .pageTitle {
+        font-size: 25px;
+    }
+
+    .formContainer {
+        padding: 20px;
+    }
+
+    #buttonContainer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #buttonContainer button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    #voiceForm label {
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .pageTitle {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+
+    #history audio {
+        width: 95%;
+    }
+}
