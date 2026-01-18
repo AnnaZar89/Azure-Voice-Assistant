@@ -1,6 +1,5 @@
 flask
-scikit-learn
-pandas
-numpy
-python-dotenv
 azure-cognitiveservices-speech
+python-dotenv
+openai
+pydub
