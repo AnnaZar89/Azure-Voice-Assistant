@@ -44,6 +44,22 @@ language = {
     "frcm": "fr-CA"
 }
 
+error_translations = {
+    "pl": {
+        "azure_error": "Nie rozpoznano mowy (Azure)",
+        "openai_error": "Błąd OpenAI: {e}",
+    },
+    "en": {
+        "azure_error": "Speech not recognized (Azure)",
+        "openai_error": "OpenAI Error: {e}",
+    },
+    "fr": {
+        "azure_error": "Parole non reconnue (Azure)",
+        "openai_error": "Erreur OpenAI : {e}",
+    }
+}
+
+
 current_voice_key = "plf"
 current_voice_name = "pl-PL-ZofiaNeural"
 voice_name_key = {}
@@ -82,6 +98,7 @@ def recognize():
     stream.write(wav_data)
     stream.close()
     result = recognizer.recognize_once()
+    lang_code = current_voice_key[:2]
 
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
         user_text = result.text
@@ -109,9 +126,8 @@ def recognize():
             })
 
         except Exception as e:
-            return jsonify({'success': False, 'error': f'Błąd OpenAI: {str(e)}'})
-
-    return jsonify({'success': False, 'error': 'Nie rozpoznano mowy (Azure)'})
+            return jsonify({'success': False, 'error': error_translations[lang_code]['openai_error'].format(e=str(e))})
+    return jsonify({'success': False, 'error': error_translations[lang_code]['azure_error']})
 
 
 @app.route('/synthesize', methods=['POST'])

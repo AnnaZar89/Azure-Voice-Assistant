@@ -69,7 +69,12 @@
                 sending: "Wysyłanie do Azure...",
                 done: "Gotowe!",
                 user: "Ty:",
-                chatTitle: "Rozmowa:"
+                chatTitle: "Rozmowa:",
+                speechError: "Błąd generowania mowy",
+                techError: "Błąd",
+                microphoneAccess: "Błąd dostępu do mikrofonu",
+                audioError: "Błąd generowania audio",
+                commError: "Błąd komunikacji"
             },
             en: {
                 recording: "Recording...",
@@ -77,15 +82,25 @@
                 sending: "Sending to Azure...",
                 done: "Done!",
                 user: "You:",
-                chatTitle: "Conversation:"
+                chatTitle: "Conversation:",
+                speechError: "Speech synthesis failed",
+                techError: "Error",
+                microphoneAccess: "Microphone access error",
+                audioError: "Audio generation error",
+                commError: "Communication error"
             },
             fr: {
                 recording: "Enregistrement...",
                 ready: "Enregistrement terminé",
                 sending: "Envoi à Azure...",
                 done: "Terminé !",
-                user: "Toi :", // we francuskim przed dwukropkiem daje się spację
-                chatTitle: "Conversation :"
+                user: "Toi :",
+                chatTitle: "Conversation :",
+                speechError: "Erreur de génération vocale",
+                techError: "Erreur",
+                microphoneAccess: "Erreur d'accès au micro",
+                audioError: "Erreur de génération audio",
+                commError: "Erreur de communication"
             }
         };
 
@@ -110,10 +125,11 @@
                     <h3>SELECTED VOICE: ${voiceData.current_voice_name}</h3>
                     `;
                 } else {
-                    voiceInformation.innerHTML = 'Błąd generowania mowy';
+                    voiceInformation.innerHTML = translations[currentLang]?.speechError;
                 }
             } catch (error) {
-              voiceInformation.innerHTML = 'Błąd: ' + error.message;
+              const prefix = translations[currentLang]["techError"];
+              voiceInformation.innerHTML = `${prefix}: ${error.message}`;
             }
         });
 
@@ -132,7 +148,7 @@
                 };
             })
             .catch(err => {
-                status.textContent = 'Błąd dostępu do mikrofonu: ' + err;
+                status.textContent = `${translations[currentLang]["microphoneAccess"]}: ${err}`;
             });
 
         recordBtn.addEventListener('click', () => {
@@ -197,14 +213,13 @@
                         document.getElementById('history').innerHTML = html;
                         status.textContent = translations[currentLang]["done"];
                     } else {
-                        status.textContent = 'Błąd generowania audio';
+                        status.textContent = translations[currentLang]["audioError"];
                     }
                 } else {
-                    status.innerHTML = `<span style="color:red">Błąd: ${data.error}</span>`;
+                    status.innerHTML = `<span style="color:red">${translations[currentLang]["techError"]}: ${data.error}</span>`;
                 }
             } catch (error) {
-                console.error(error);
-                status.textContent = 'Błąd komunikacji: ' + error.message;
+                status.textContent = `${translations[currentLang]["commError"]}: ${error.message}`;
             } finally {
                 sendBtn.disabled = false;
             }
