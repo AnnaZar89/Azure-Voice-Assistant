@@ -26,7 +26,7 @@
             </select>
             <input id="submitVoiceChoice" type="submit" value="Save">
         </form><br>
-        <form id="buttonContainer" style="display: none">
+        <form id="historyAndButtonContainer" style="display: none">
             <input type="hidden" name="history" id="historyInput" value='{{ history_json|safe }}'>
             <button type="button" id="recordBtn">Record</button>
             <button type="button" id="sendBtn" disabled>Send to Azure</button>
@@ -39,9 +39,6 @@
             <div id="result"></div>
         </div>
     </div>
-
-
-
     <script>
         window.onload = () => {
             document.getElementById('historyInput').value = '[]';
@@ -53,13 +50,12 @@
         let audioIndex;
         let current_voice_key = ''
         let currentLang = ''
-
         const recordBtn = document.getElementById('recordBtn');
         const sendBtn = document.getElementById('sendBtn');
         const status = document.getElementById('status');
         const clearBtn = document.getElementById('clearBtn');
         const voiceForm = document.getElementById('voiceForm');
-        const buttonContainer = document.getElementById('buttonContainer');
+        const historyAndButtonContainer = document.getElementById('historyAndButtonContainer');
         const voiceInformation = document.getElementById('voiceInformation');
 
         const translations = {
@@ -108,7 +104,7 @@
 
        voiceForm.addEventListener('submit', async (e)=> {
             e.preventDefault()
-            buttonContainer.style.display="flex";
+            historyAndButtonContainer.style.display="flex";
             voiceForm.style.display="none";
             const formVoice = new FormData(e.target);
             try {
@@ -118,7 +114,6 @@
                 });
             if (response.ok) {
                 const voiceData = await response.json();
-                console.log(voiceData)
                 current_voice_key = voiceData.current_voice_key
                 currentLang = current_voice_key.slice(0, 2);
                 voiceInformation.innerHTML = `
@@ -155,8 +150,6 @@
             if (mediaRecorder.state === 'recording') {
                 mediaRecorder.stop();
                 recordBtn.textContent = 'Record';
-
-
             } else {
                 audioChunks = [];
                 audioBlob = null;
@@ -171,7 +164,7 @@
             if (!audioBlob) return;
             status.textContent = translations[currentLang]["sending"];
             sendBtn.disabled = true;
-            const formData = new FormData(document.getElementById('buttonContainer'));
+            const formData = new FormData(document.getElementById('historyAndButtonContainer'));
             formData.append('audio', audioBlob, 'audio.webm');
             try {
                 const response = await fetch('/recognize', {
@@ -179,10 +172,6 @@
                     body: formData
                 });
                 const data = await response.json();
-                console.log('=== ODPOWIEDŹ Z SERWERA ===');
-                console.log('data:', data);
-                console.log('data.history_json:', data.history_json);
-                console.log('Typ:', typeof data.history_json);
 
                 if (data.success) {
                     const audioFormData = new FormData();
@@ -231,7 +220,7 @@
             audioHistory = [];
             audioIndex = 0;
             voiceForm.style.display="flex";
-            buttonContainer.style.display="none";
+            historyAndButtonContainer.style.display="none";
             status.textContent = '';
             voiceChoice.value = 'plf';
             document.getElementById('history').style.display = 'none';
