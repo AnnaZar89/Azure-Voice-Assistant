@@ -163,6 +163,7 @@ Azure-Voice-Assistant/
 
 ### 1. Voice Selection
 User selects their preferred language and voice from the dropdown menu. The application supports 10 different voice options across multiple languages.
+<img width="945" height="432" alt="obraz" src="https://github.com/user-attachments/assets/063631d4-e16c-49ad-9e81-aac49f336c96" />
 
 ### 2. Recording
 - Click **RECORD** to start voice capture
