@@ -1,64 +1,267 @@
 # Azure Voice Assistant
-**Azure Voice Assistant** to aplikacja webowa stworzona we frameworku **Flask**, która umożliwia konwersację z modelem **ChatGPT** za pomocą głosu.
 
-## Funkcje
-- **konwersacja w wielu językach**: wybór języka dla konwersacji 
-- **zwracanie inteligentnych odpowiedzi**: generowanie odpowiedzi przez modele OpenAI
-- **rozpoznawanie mowy**: przetwarzanie głosu użytkownika na tekst (Speech-To-Text)
-- **synteza mowy**: przetwarzanie tekstu zwróconego przez OpenAI na mowę (Text-To-Speech)
+A web-based voice assistant built with **Flask** that enables natural conversation with **ChatGPT** using voice commands.
 
-## Motywacja i napotkane problemy
+## 🎯 Features
 
-## Biblioteki i programy niezbędne do działania projektu
-- **Flask**: framework do budowy aplikacji webowych
-- **OpenAI Library**: integracja z modelami OpenAI
-- **Azure Cognitive Services (speech)**: przetwarzanie mowy
-- **Python-dotenv**: zarządzanie zmiennymi środowiskowymi
-- **Pydub & FFmpeg**: konwersja formatów audio (WebM/Opus do WAV)
+- **Multilingual Conversation**: Support for multiple languages and voice options
+- **Intelligent Responses**: Powered by OpenAI's GPT models
+- **Speech Recognition**: Real-time voice-to-text conversion (Speech-to-Text)
+- **Speech Synthesis**: Text-to-speech conversion with natural-sounding voices (Text-to-Speech)
+- **Conversation History**: Maintains context across multiple exchanges
+- **Responsive Design**: Optimized for both desktop and mobile devices
 
-## Konfiguracja zmiennych środowiskowych
-Do uruchomienia projektu konieczne jest utworzenie pliku `.env` zawierającego zmienne środowiskowe, 
-które umożliwią aplikacji połączenie z chmurą Azure. 
-W pliku należy zdefiniować klucz oraz region zasobu Azure Speech, 
-a także klucz API do modelu OpenAI, wygenerowany po utworzeniu konta na platformie OpenAI.
+## 🗣️ Available Languages and Voices
+
+- **Polish**: Zofia (female), Marek (male)
+- **English (US)**: Jenny (female), Andrew (male)
+- **English (UK)**: Abbi (female), Ryan (male)
+- **French (France)**: Denise (female), Henri (male)
+- **French (Canada)**: Sylvie (female), Antoine (male)
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Flask**: Web application framework
+- **OpenAI API**: Chat completion and AI responses
+- **Azure Cognitive Services (Speech)**: Speech recognition and synthesis
+- **Python-dotenv**: Environment variable management
+- **Pydub & FFmpeg**: Audio format conversion (WebM/Opus to WAV)
+
+### Frontend
+- **JavaScript**: Dynamic UI and asynchronous communication
+- **HTML/CSS**: Responsive interface with media queries
+- **AJAX**: Seamless data updates without page reload
+
+## 📋 Prerequisites
+
+- Python 3.8+
+- FFmpeg (for audio conversion)
+- Azure subscription (for Speech Services)
+- OpenAI API key
+
+## ⚙️ Installation
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/AnnaZar89/Azure-Voice-Assistant.git
+cd Azure-Voice-Assistant
+```
+
+### 2. Create Virtual Environment
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# macOS/Linux
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Install FFmpeg
+
+**Windows:**
+1. Download FFmpeg from [ffmpeg.org](https://ffmpeg.org/download.html)
+2. Extract the archive
+3. Add the `bin` folder to your system PATH environment variable
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+### 5. Configure Environment Variables
+
+Create a `.env` file in the project root directory with the following variables:
 
 ```env
-AZURE_SPEECH_KEY=twój_klucz_azure
-AZURE_SPEECH_REGION=twój_region_azure
-OPENAI_API_KEY=twój_klucz_openai
+AZURE_SPEECH_KEY=your_azure_speech_key
+AZURE_SPEECH_REGION=your_azure_region
+OPENAI_API_KEY=your_openai_api_key
 ```
 
-## Uruchomienie aplikacji
-Po skonfigurowaniu kluczy w pliku `.env`, uruchom serwer komendą:
+**How to obtain the keys:**
 
-```env
-python main.py
+- **Azure Speech Key**: 
+  1. Create an Azure account at [portal.azure.com](https://portal.azure.com)
+  2. Create a "Speech" resource
+  3. Copy the key and region from the resource's "Keys and Endpoint" section
+
+- **OpenAI API Key**: 
+  1. Create an account at [platform.openai.com](https://platform.openai.com/)
+  2. Navigate to API keys section
+  3. Generate a new API key
+
+**Important**: Add `.env` to your `.gitignore` file to prevent exposing sensitive credentials:
+```bash
+echo ".env" >> .gitignore
 ```
-Aplikacja będzie dostępna pod adresem: http://127.0.0.1:5000
 
-## Struktura projektu
+## 🚀 Running the Application
 
-```text
+### Local Development
 
-├── main.py              # Główny plik aplikacji (logika Flask, Azure, OpenAI)
-├── .env                 # Plik ze zmiennymi środowiskowymi (klucze API)
-├── static/              # Pliki używane przez interfejs użytkownika (style i skrypty)
-│   ├── style.css        # Style CSS (w tym Media Queries)
-│   └── city.png         # Obraz tła dla aplikacji
-└── templates/           # Szablony HTML
-    └── index.html       # Główny interfejs użytkownika
+```bash
+python app.py
 ```
-## Autor i Kontakt
 
-**Autor:** Anna Zaryczańska
+The application will be available at: `http://127.0.0.1:5000`
 
-**Kontakt:** annazar00@gmail.com
+### Using Docker
 
+Build the Docker image:
+```bash
+docker build -t azure-voice-assistant .
+```
 
+Run the container:
+```bash
+docker run -p 5000:5000 --env-file .env azure-voice-assistant
+```
 
+## 📁 Project Structure
 
+```
+Azure-Voice-Assistant/
+│
+├── .github/
+│   └── workflows/
+│       └── main_azure-voice-assistant.yml  # CI/CD workflow
+│
+├── static/                                  # Frontend assets
+│   ├── style.css                            # CSS styles with media queries
+│   └── city.png                             # Background image
+│
+├── templates/                               # HTML templates
+│   └── index.html                           # Main user interface
+│
+├── venv/                                    # Virtual environment
+│
+├── .dockerignore                            # Docker build exclusions
+├── .env                                     # Environment variables (not in repo)
+├── .gitignore                               # Git exclusions
+├── app.py                                   # Main Flask application
+├── Dockerfile                               # Docker image definition
+├── README.md                                # Project documentation
+├── requirements.txt                         # Python dependencies
+└── startup.sh                               # Startup script for Azure Web App
+```
 
+## 💻 How It Works
 
+### 1. Voice Selection
+User selects their preferred language and voice from the dropdown menu. The application supports 10 different voice options across multiple languages.
 
+### 2. Recording
+- Click **RECORD** to start voice capture
+- Speak your question or command
+- Click **STOP** to end recording
+- The browser captures audio in WebM format
 
+### 3. Speech Recognition
+- Click **SEND TO AZURE** to process the recording
+- Audio is converted from WebM to WAV format using Pydub and FFmpeg
+- Azure Speech Service performs Speech-to-Text conversion
+- Recognized text is displayed on screen
 
+### 4. AI Processing
+- The transcribed text is sent to OpenAI's GPT-3.5-Turbo model
+- The AI generates a contextual response based on conversation history
+- The response is sent back to the application
+
+### 5. Speech Synthesis
+- The AI's text response is sent to Azure Speech Service
+- Text-to-Speech conversion occurs using the selected voice
+- Audio is returned as WAV format binary data
+
+### 6. Display and Playback
+- Both the user's question and AI's response are displayed as text
+- Audio player is automatically generated for the AI's response
+- The latest response plays automatically
+- Full conversation history is maintained and displayed
+
+### 7. History Management
+- Click **CLEAR HISTORY** to reset the conversation
+- This clears all messages and audio recordings
+- Returns to the voice selection screen
+- Allows starting a fresh conversation without prior context
+
+## 🌐 Deployment
+
+### Azure Web App Deployment
+
+The application includes CI/CD configuration for automated deployment to Azure Web Apps:
+
+1. The `.github/workflows/main_azure-voice-assistant.yml` file defines the deployment pipeline
+2. On push to the main branch, GitHub Actions:
+   - Builds a Docker image
+   - Pushes it to Azure Container Registry
+   - Deploys to Azure Web App
+
+### Docker Benefits
+
+- **Consistency**: Application runs identically across all environments
+- **Isolation**: All dependencies packaged together
+- **Portability**: Easy deployment to any platform with Docker
+- **CI/CD Integration**: Automated build and deployment pipeline
+
+## 🔒 Security Notes
+
+- Never commit `.env` file to version control
+- Keep your API keys confidential
+- Regularly rotate API keys
+- Use Azure Key Vault for production deployments
+- Implement rate limiting for API calls
+
+## 🐛 Troubleshooting
+
+### FFmpeg Issues
+- Ensure FFmpeg is properly installed and in system PATH
+- Test with: `ffmpeg -version`
+- On Windows, restart terminal after adding to PATH
+
+### Azure Speech Service Errors
+- Verify your subscription key and region are correct
+- Check your Azure Speech Service quota and usage
+- Ensure your Azure subscription is active
+
+### OpenAI API Errors
+- Verify API key is valid and active
+- Check your OpenAI account has available credits
+- Monitor rate limits and usage
+
+### Microphone Access
+- Grant microphone permissions in your browser
+- Use HTTPS in production (required for microphone access)
+- Check browser console for permission errors
+
+## 📊 Demo
+
+Live demo available at: [Azure Voice Assistant](https://azure-voice-assistant-1801-auh0htamc3hwdxe5.swedencentral-01.azurewebsites.net/)
+
+## 🔗 Links
+
+- **GitHub Repository**: [https://github.com/AnnaZar89/Azure-Voice-Assistant](https://github.com/AnnaZar89/Azure-Voice-Assistant)
+- **Azure Speech Documentation**: [https://docs.microsoft.com/azure/cognitive-services/speech-service/](https://docs.microsoft.com/azure/cognitive-services/speech-service/)
+- **OpenAI API Documentation**: [https://platform.openai.com/docs](https://platform.openai.com/docs)
+
+## 📝 License
+
+This project is available for educational and personal use.
+
+## 👤 Author
+
+Anna Zaryczańska
+annazar00@gmail.com
