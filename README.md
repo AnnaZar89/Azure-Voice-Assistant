@@ -271,6 +271,7 @@ Live demo available at: [Azure Voice Assistant](https://azure-voice-assistant-18
 - **GitHub Repository**: [https://github.com/AnnaZar89/Azure-Voice-Assistant](https://github.com/AnnaZar89/Azure-Voice-Assistant)
 - **Azure Speech Documentation**: [https://docs.microsoft.com/azure/cognitive-services/speech-service/](https://docs.microsoft.com/azure/cognitive-services/speech-service/)
 - **OpenAI API Documentation**: [https://platform.openai.com/docs](https://platform.openai.com/docs)
+- **Detailed project description (in polish)**: [link](https://docs.google.com/document/d/1vZkRJI-x8gmgDVdon7ySAcyJtnYi-Dw1/edit?usp=sharing&ouid=110635265648149776596&rtpof=true&sd=true)
 
 ## 📝 License
 
