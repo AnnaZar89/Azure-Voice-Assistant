@@ -163,18 +163,30 @@ Azure-Voice-Assistant/
 
 ### 1. Voice Selection
 User selects their preferred language and voice from the dropdown menu. The application supports 10 different voice options across multiple languages.
+<br>
+<br>
+<img width="650" alt="obraz" src="https://github.com/user-attachments/assets/063631d4-e16c-49ad-9e81-aac49f336c96" />
 
 ### 2. Recording
 - Click **RECORD** to start voice capture
 - Speak your question or command
 - Click **STOP** to end recording
 - The browser captures audio in WebM format
+<br>
+<img width="400" alt="obraz" src="https://github.com/user-attachments/assets/4d3ad3d5-6da9-46f5-ad4d-ebc0ad59430d" /> <br>
+<br>
+<img width="400" alt="obraz" src="https://github.com/user-attachments/assets/de3ffff7-4e24-4c9f-9d6d-5a64a5194a45" /> <br>
+<br>
+<img width="400" alt="obraz" src="https://github.com/user-attachments/assets/6110632e-62a0-4e06-911a-10a437d57f29" /> <br>
+
 
 ### 3. Speech Recognition
 - Click **SEND TO AZURE** to process the recording
 - Audio is converted from WebM to WAV format using Pydub and FFmpeg
 - Azure Speech Service performs Speech-to-Text conversion
-- Recognized text is displayed on screen
+<br>
+<img width="400"alt="obraz" src="https://github.com/user-attachments/assets/ba33d5ea-7aa1-4671-b13c-3ce49d5dff1e" />
+
 
 ### 4. AI Processing
 - The transcribed text is sent to OpenAI's GPT-3.5-Turbo model
@@ -191,6 +203,9 @@ User selects their preferred language and voice from the dropdown menu. The appl
 - Audio player is automatically generated for the AI's response
 - The latest response plays automatically
 - Full conversation history is maintained and displayed
+<br>
+<img width="650" alt="obraz" src="https://github.com/user-attachments/assets/27cb63a9-eac5-48be-ba21-335df9f2abb1" />
+
 
 ### 7. History Management
 - Click **CLEAR HISTORY** to reset the conversation
@@ -256,6 +271,7 @@ Live demo available at: [Azure Voice Assistant](https://azure-voice-assistant-18
 - **GitHub Repository**: [https://github.com/AnnaZar89/Azure-Voice-Assistant](https://github.com/AnnaZar89/Azure-Voice-Assistant)
 - **Azure Speech Documentation**: [https://docs.microsoft.com/azure/cognitive-services/speech-service/](https://docs.microsoft.com/azure/cognitive-services/speech-service/)
 - **OpenAI API Documentation**: [https://platform.openai.com/docs](https://platform.openai.com/docs)
+- **Detailed project description (in polish)**: [link](https://docs.google.com/document/d/1vZkRJI-x8gmgDVdon7ySAcyJtnYi-Dw1/edit?usp=sharing&ouid=110635265648149776596&rtpof=true&sd=true)
 
 ## 📝 License
 
