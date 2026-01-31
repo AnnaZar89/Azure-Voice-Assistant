@@ -49,7 +49,7 @@
         let audioHistory = [];
         let audioIndex;
         let current_voice_key = ''
-        let currentLang = ''
+        let currentLang = 'pl'
         const recordBtn = document.getElementById('recordBtn');
         const sendBtn = document.getElementById('sendBtn');
         const status = document.getElementById('status');
@@ -143,7 +143,8 @@
                 };
             })
             .catch(err => {
-                status.textContent = `${translations[currentLang]["microphoneAccess"]}: ${err}`;
+                status.textContent = translations[currentLang].microphoneAccess;
+                status.style.color = 'red';
             });
 
         recordBtn.addEventListener('click', () => {

@@ -108,13 +108,13 @@ div {
     background: rgba(45, 45, 45, 0.9);
 }
 
-#buttonContainer {
+#historyAndButtonContainer {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-#buttonContainer button {
+#historyAndButtonContainer button {
     background: #262626;
     color: white;
     font-size: 11px;
@@ -131,7 +131,7 @@ div {
     transition: 0.5s;
 }
 
-#buttonContainer button:hover {
+#historyAndButtonContainer button:hover {
     background: #4A4A4A;
 }
 
